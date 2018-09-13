@@ -1,12 +1,12 @@
 package com.sostice.ecommerceorder.controllers;
 
-import com.sostice.ecommerceorder.domain.Line;
-import com.sostice.ecommerceorder.domain.Order;
-import com.sostice.ecommerceorder.service.OrderManagementService;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+        import com.sostice.ecommerceorder.domain.Line;
+        import com.sostice.ecommerceorder.domain.Order;
+        import com.sostice.ecommerceorder.service.OrderManagementService;
+        import org.springframework.http.HttpStatus;
+        import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+        import java.util.List;
 
 @RestController
 public class OrderController {
@@ -20,7 +20,7 @@ public class OrderController {
     @PostMapping("/orders")
     @ResponseStatus(HttpStatus.CREATED)
     public Order createOrder(Order orderIn){
-        return orderManagementService.saveOrCreateOrder(orderIn);
+        return orderManagementService.createOrder(orderIn);
     }
 
     @GetMapping("/orders")

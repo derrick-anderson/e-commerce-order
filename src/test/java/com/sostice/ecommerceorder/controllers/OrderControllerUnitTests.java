@@ -1,6 +1,5 @@
 package com.sostice.ecommerceorder.controllers;
 
-import com.sostice.ecommerceorder.domain.Line;
 import com.sostice.ecommerceorder.domain.Order;
 import com.sostice.ecommerceorder.service.OrderManagementService;
 import org.junit.Before;
@@ -48,7 +47,7 @@ public class OrderControllerUnitTests {
     @Test
     public void createOrder_HappyPath_Order() throws Exception{
 
-        when(orderManagementService.saveOrCreateOrder(any())).thenReturn(getMockOrder());
+        when(orderManagementService.createOrder(any())).thenReturn(getMockOrder());
 
         mockMvc.perform(
                 post("/orders")
@@ -101,12 +100,11 @@ public class OrderControllerUnitTests {
     }
 
     public List<Order> getMockOrderList(){
-        List<Order> orderlist = new ArrayList<Order>(){{
+        return new ArrayList<Order>(){{
             add(getMockOrder());
             add(getMockOrder());
             add(getMockOrder());
             add(getMockOrder());
         }};
-        return orderlist;
     }
 }
