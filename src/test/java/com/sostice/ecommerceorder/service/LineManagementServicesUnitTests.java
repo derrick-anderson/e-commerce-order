@@ -42,7 +42,7 @@ public class LineManagementServicesUnitTests {
         assertThat(allLines.get(1).getUnitPrice(), is(new BigDecimal("150.00")));
         assertThat(allLines.get(1).getTotalPrice(), is(new BigDecimal("3000.00")));
         assertThat(allLines.get(1).getShipmentId(), is(67890L));
-        assertThat(allLines.get(1).getOrderId(), is(12345L));
+        assertThat(allLines.get(1).getOrderNumber(), is(12345L));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class LineManagementServicesUnitTests {
         assertThat(foundLine.getUnitPrice(), is(new BigDecimal("150.00")));
         assertThat(foundLine.getTotalPrice(), is(new BigDecimal("3000.00")));
         assertThat(foundLine.getShipmentId(), is(67890L));
-        assertThat(foundLine.getOrderId(), is(12345L));
+        assertThat(foundLine.getOrderNumber(), is(12345L));
     }
 
     @Test
@@ -74,7 +74,7 @@ public class LineManagementServicesUnitTests {
         assertThat(savedLine.getUnitPrice(), is(new BigDecimal("80.00")));
         assertThat(savedLine.getTotalPrice(), is(new BigDecimal("800.00")));
         assertThat(savedLine.getShipmentId(), is(nullValue()));
-        assertThat(savedLine.getOrderId(), is(12345L));
+        assertThat(savedLine.getOrderNumber(), is(12345L));
 
     }
 

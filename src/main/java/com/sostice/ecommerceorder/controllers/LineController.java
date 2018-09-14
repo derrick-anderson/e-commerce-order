@@ -20,7 +20,7 @@ public class LineController {
     @ResponseStatus(HttpStatus.CREATED)
     public Line createLineForOrder(@PathVariable("orderNumber") Long orderNumber, Line orderLine){
 
-        orderLine.setOrderId(orderNumber);
+        orderLine.setOrderNumber(orderNumber);
         return lineManagementServices.saveLine(orderLine);
 
     }
@@ -28,7 +28,7 @@ public class LineController {
     @GetMapping("/orders/{orderNumber}/lines")
     public List<Line> getAllLinesForOrder(@PathVariable("orderNumber") Long orderNumber){
 
-        return null;
+        return lineManagementServices.getAllLinesForOrder(orderNumber);
     }
 
     @GetMapping("/orders/{orderNumber}/lines/{lineId}")

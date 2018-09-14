@@ -16,16 +16,16 @@ public class Line {
     private BigDecimal totalPrice = BigDecimal.ZERO;
     private Long shipmentId;
     private Long productId;
-    private Long orderId;
+    private Long orderNumber;
 
     public Line() {
     }
 
-    public Line(int quantity, BigDecimal unitPrice, Long productId, Long orderId) {
+    public Line(int quantity, BigDecimal unitPrice, Long productId, Long orderNumber) {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
         this.productId = productId;
-        this.orderId = orderId;
+        this.orderNumber = orderNumber;
     }
 
     public Long getLineItemId() {
@@ -76,11 +76,11 @@ public class Line {
         this.productId = productId;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public Long getOrderNumber() {
+        return orderNumber;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setOrderNumber(Long orderNumber) {
+        this.orderNumber = orderNumber;
     }
 }

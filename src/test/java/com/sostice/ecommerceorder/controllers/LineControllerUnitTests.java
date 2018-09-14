@@ -10,13 +10,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,9 +54,34 @@ public class LineControllerUnitTests {
                 .andExpect(jsonPath("$.unitPrice", is(150.00)))
                 .andExpect(jsonPath("$.totalPrice", is(3000.00)))
                 .andExpect(jsonPath("$.productId", is(nullValue())))
-                .andExpect(jsonPath("$.orderId", is(12345)))
+                .andExpect(jsonPath("$.orderNumber", is(12345)))
                 .andExpect(jsonPath("$.shipmentId", is(nullValue())))
         ;
+    }
+
+    @Test
+    public void getAllLinesForOrder_HappyPath() throws Exception{
+        when(lineManagementServices.getAllLinesForOrder(12345L)).thenReturn(getMockLineList());
+
+        mockMvc.perform(get("/orders/12345/lines"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$", hasSize(5)))
+                .andExpect(jsonPath("$[1].lineItemId", is(16)))
+                .andExpect(jsonPath("$[2].orderNumber", is(12345)))
+                .andExpect(jsonPath("$[3].totalPrice", is(3000.00)))
+                .andExpect(jsonPath("$[4].shipmentId", is(nullValue())))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    private List<Line> getMockLineList() {
+        return new ArrayList<Line>(){{
+            add(getSavedMockLine(15L));
+            add(getSavedMockLine(16L));
+            add(getSavedMockLine(17L));
+            add(getSavedMockLine(18L));
+            add(getSavedMockLine(19L));
+        }};
     }
 
     //Helper Methods
