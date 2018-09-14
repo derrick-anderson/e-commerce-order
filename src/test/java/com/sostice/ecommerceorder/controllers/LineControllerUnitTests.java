@@ -44,9 +44,10 @@ public class LineControllerUnitTests {
     public void createLineItemForOrder_HappyPath() throws Exception {
 
         when(lineManagementServices.saveLine(any(Line.class))).thenReturn(getSavedMockLine(15L));
-
+        String lineJson = "{\"quantity\": 20, \"unitPrice\": 150.00, \"productId\": 5, \"orderNumber\": 12345}";
         mockMvc.perform(post("/orders/12345/lines")
-                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(lineJson))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.lineItemId", is(15)))
@@ -72,6 +73,22 @@ public class LineControllerUnitTests {
                 .andExpect(jsonPath("$[3].totalPrice", is(3000.00)))
                 .andExpect(jsonPath("$[4].shipmentId", is(nullValue())))
                 .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void getOneLineById_HappyPath() throws Exception{
+        when(lineManagementServices.getOneLineById(15L)).thenReturn(getSavedMockLine(15L));
+
+        mockMvc.perform(get("/orders/12345/lines/15"))
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.lineItemId", is(15)))
+                .andExpect(jsonPath("$.quantity", is(20)))
+                .andExpect(jsonPath("$.unitPrice", is(150.00)))
+                .andExpect(jsonPath("$.totalPrice", is(3000.00)))
+                .andExpect(jsonPath("$.shipmentId", is(nullValue())))
+                .andExpect(jsonPath("$.productId", is(nullValue())))
+                .andExpect(jsonPath("$.shipmentId", is(nullValue())))
+                .andExpect(jsonPath("$.orderNumber", is(12345)));
     }
 
     private List<Line> getMockLineList() {

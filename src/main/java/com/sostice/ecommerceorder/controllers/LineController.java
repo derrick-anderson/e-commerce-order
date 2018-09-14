@@ -34,7 +34,7 @@ public class LineController {
     @GetMapping("/orders/{orderNumber}/lines/{lineId}")
     public Line getOneLineForOrder(@PathVariable("orderNumber") Long orderNumber, @PathVariable("lineId") Long lineId){
 
-        return null;
+        return lineManagementServices.getOneLineById(15L);
     }
 
 }
