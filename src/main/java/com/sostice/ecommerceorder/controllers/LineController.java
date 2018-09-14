@@ -19,16 +19,21 @@ public class LineController {
     @PostMapping("/orders/{orderNumber}/lines")
     @ResponseStatus(HttpStatus.CREATED)
     public Line createLineForOrder(@PathVariable("orderNumber") Long orderNumber, Line orderLine){
-        return null;
+
+        orderLine.setOrderId(orderNumber);
+        return lineManagementServices.saveLine(orderLine);
+
     }
 
     @GetMapping("/orders/{orderNumber}/lines")
     public List<Line> getAllLinesForOrder(@PathVariable("orderNumber") Long orderNumber){
+
         return null;
     }
 
     @GetMapping("/orders/{orderNumber}/lines/{lineId}")
     public Line getOneLineForOrder(@PathVariable("orderNumber") Long orderNumber, @PathVariable("lineId") Long lineId){
+
         return null;
     }
 
