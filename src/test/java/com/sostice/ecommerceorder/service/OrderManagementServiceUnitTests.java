@@ -1,6 +1,7 @@
 package com.sostice.ecommerceorder.service;
 
 import com.sostice.ecommerceorder.data.OrderRepository;
+import com.sostice.ecommerceorder.domain.Line;
 import com.sostice.ecommerceorder.domain.Order;
 import org.junit.Before;
 import org.junit.Test;
@@ -67,11 +68,13 @@ public class OrderManagementServiceUnitTests {
 
     //Convenience Methods
     public Order getMockOrder(){
-        Order mockOrder = new Order(1L, 1L);
+        Order mockOrder = new Order();
         mockOrder.setOrderDate( LocalDate.of(2018,8,15));
         mockOrder.setOrderNumber(12345L);
         mockOrder.setTotalPrice(new BigDecimal("0.00"));
-
+        mockOrder.setLineItems(new ArrayList<>());
+        mockOrder.setAccountId(1L);
+        mockOrder.setShippingAddressId(1L);
         return mockOrder;
     }
 

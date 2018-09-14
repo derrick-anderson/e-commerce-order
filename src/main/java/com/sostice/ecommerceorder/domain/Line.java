@@ -64,10 +64,6 @@ public class Line {
         return unitPrice.multiply(BigDecimal.valueOf(quantity));
     }
 
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
     public Long getProductId() {
         return productId;
     }

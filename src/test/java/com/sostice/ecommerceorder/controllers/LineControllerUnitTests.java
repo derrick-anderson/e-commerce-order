@@ -102,7 +102,12 @@ public class LineControllerUnitTests {
 
     //Helper Methods
     private Line getSavedMockLine(Long id){
-        Line mockLine = new Line(20, new BigDecimal("150.00"), null, 12345L);
+        //Line mockLine = new Line(20, new BigDecimal("150.00"), null, 12345L);
+        Line mockLine = new Line();
+        mockLine.setQuantity(20);
+        mockLine.setUnitPrice(new BigDecimal("150.00"));
+        mockLine.setProductId(null);
+        mockLine.setOrderNumber(12345L);
         mockLine.setLineItemId(id);
         return mockLine;
     }
