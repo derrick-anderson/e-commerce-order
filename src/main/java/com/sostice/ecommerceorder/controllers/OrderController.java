@@ -1,6 +1,5 @@
 package com.sostice.ecommerceorder.controllers;
 
-        import com.sostice.ecommerceorder.domain.Line;
         import com.sostice.ecommerceorder.domain.Order;
         import com.sostice.ecommerceorder.service.OrderManagementService;
         import org.springframework.http.HttpStatus;
@@ -30,7 +29,7 @@ public class OrderController {
 
     @GetMapping("/orders/{orderNumber}")
     public Order getOneOrder(@PathVariable("orderNumber") Long orderNumber){
-        return orderManagementService.getSingleOrder(orderNumber);
+        return orderManagementService.getOneOrder(orderNumber);
     }
 
 }

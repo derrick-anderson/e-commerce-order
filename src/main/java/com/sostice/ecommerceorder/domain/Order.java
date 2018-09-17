@@ -64,13 +64,9 @@ public class Order {
     }
 
     public BigDecimal getTotalPrice() {
-        BigDecimal totalCalculatedPrice = BigDecimal.ZERO;
-        totalCalculatedPrice = lineItems.stream()
-                .map(Line::getTotalPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        return totalCalculatedPrice;
-//        return totalPrice;
+        return lineItems.stream()
+                    .map(Line::getTotalPrice)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void setTotalPrice(BigDecimal totalPrice) {

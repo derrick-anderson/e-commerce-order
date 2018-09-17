@@ -76,7 +76,7 @@ public class OrderControllerUnitTests {
     @Test
     public void getOneOrder_HappyPath_Order() throws Exception{
 
-        when(orderManagementService.getSingleOrder(anyLong())).thenReturn(getMockOrder());
+        when(orderManagementService.getOneOrder(anyLong())).thenReturn(getMockOrder());
 
         mockMvc.perform(get("/orders/12345"))
             .andExpect(status().isOk())
@@ -85,6 +85,10 @@ public class OrderControllerUnitTests {
             .andDo(MockMvcResultHandlers.print());
     }
 
+//    @Test
+//    public void deleteOrder_HappyPath() throws Exception{
+//
+//    }
     //Helper Method that provides mock objects for class
     public Order getMockOrder(){
         Order mockOrder = new Order(1L, 1L);

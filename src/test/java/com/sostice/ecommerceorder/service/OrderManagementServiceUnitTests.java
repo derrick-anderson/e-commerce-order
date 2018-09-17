@@ -1,7 +1,6 @@
 package com.sostice.ecommerceorder.service;
 
 import com.sostice.ecommerceorder.data.OrderRepository;
-import com.sostice.ecommerceorder.domain.Line;
 import com.sostice.ecommerceorder.domain.Order;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +17,8 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -34,10 +35,10 @@ public class OrderManagementServiceUnitTests {
     }
 
     @Test
-    public void testGetSingleOrder_HappyPath(){
+    public void getOneOrder_HappyPath(){
         when(orderRepository.getOne(anyLong())).thenReturn(getMockOrder());
 
-        Order foundOrder = orderManagementService.getSingleOrder(12345L);
+        Order foundOrder = orderManagementService.getOneOrder(12345L);
         assertThat(foundOrder.getAccountId(), is(1L));
         assertThat(foundOrder.getShippingAddressId(), is(1L));
         assertThat(foundOrder.getOrderDate().toString(), is("2018-08-15"));
@@ -45,7 +46,7 @@ public class OrderManagementServiceUnitTests {
     }
 
     @Test
-    public void testGetAllOrders_HappyPath(){
+    public void getAllOrders_HappyPath(){
 
         when(orderRepository.findAll()).thenReturn(getMockOrderList());
 
@@ -55,7 +56,7 @@ public class OrderManagementServiceUnitTests {
     }
 
     @Test
-    public void testSaveOrCreateOrder_HappyPath(){
+    public void createOrder_HappyPath(){
         when(orderRepository.save(any(Order.class))).thenReturn(getMockOrder());
 
         Order savedOrder = orderManagementService.createOrder(getOrderToSave());
@@ -66,12 +67,35 @@ public class OrderManagementServiceUnitTests {
 
     }
 
+    @Test
+    public void deleteOrder_HappyPath(){
+
+        when(orderRepository.getOne(12345L)).thenReturn(new Order());
+        orderManagementService.deleteOrder(12345L);
+
+        verify(orderRepository, times(1)).getOne(12345L);
+        verify(orderRepository, times(1)).deleteById(12345L);
+    }
+
+    @Test
+    public void updateOrder_HappyPath(){
+        Order updateOrder = new Order(null, 15L);
+        when(orderRepository.getOne(12345L)).thenReturn(getMockOrder());
+
+        Order updatedOrder = orderManagementService.updateOrder(12345L, updateOrder);
+        assertThat(updatedOrder.getOrderNumber(), is(12345L));
+        assertThat(updatedOrder.getOrderDate().toString(), is("2018-08-15"));
+        assertThat(updatedOrder.getTotalPrice(), is(BigDecimal.ZERO));
+        assertThat(updatedOrder.getAccountId(), is(1L));
+        assertThat(updatedOrder.getShippingAddressId(), is(15L));
+    }
+
     //Convenience Methods
     public Order getMockOrder(){
         Order mockOrder = new Order();
         mockOrder.setOrderDate( LocalDate.of(2018,8,15));
         mockOrder.setOrderNumber(12345L);
-        mockOrder.setTotalPrice(new BigDecimal("0.00"));
+        mockOrder.setTotalPrice(BigDecimal.ZERO);
         mockOrder.setLineItems(new ArrayList<>());
         mockOrder.setAccountId(1L);
         mockOrder.setShippingAddressId(1L);
@@ -81,6 +105,7 @@ public class OrderManagementServiceUnitTests {
     public Order getOrderToSave(){
         return new Order( 1L, 1L);
     }
+
     public List<Order> getMockOrderList(){
         return new ArrayList<Order>(){{
             add(getMockOrder());
