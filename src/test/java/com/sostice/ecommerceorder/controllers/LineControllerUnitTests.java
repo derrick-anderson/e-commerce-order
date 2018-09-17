@@ -20,7 +20,10 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -88,6 +91,16 @@ public class LineControllerUnitTests {
                 .andExpect(jsonPath("$.productId", is(nullValue())))
                 .andExpect(jsonPath("$.shipmentId", is(nullValue())))
                 .andExpect(jsonPath("$.orderNumber", is(12345)));
+    }
+
+    @Test
+    public void deleteLineItem_HappyPath() throws Exception{
+
+        mockMvc.perform(delete("/orders/12345/lines/15"))
+                .andExpect(status().isNoContent());
+
+        verify(lineManagementServices, times(1)).deleteLine(15L);
+
     }
 
     private List<Line> getMockLineList() {

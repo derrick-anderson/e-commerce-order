@@ -37,4 +37,10 @@ public class LineController {
         return lineManagementServices.getOneLineById(15L);
     }
 
+    @DeleteMapping("/orders/{orderNumber}/lines/{lineId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteLine(@PathVariable("orderNumber") Long orderNumber, @PathVariable("lineId") Long lineId){
+        lineManagementServices.deleteLine(lineId);
+    }
+
 }
