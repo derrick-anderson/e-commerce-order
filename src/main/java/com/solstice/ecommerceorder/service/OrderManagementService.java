@@ -24,13 +24,17 @@ public class OrderManagementService {
     public Order getOneOrder(long orderNumber) {
         Optional<Order> foundOrder = orderRepository.findById(orderNumber);
         if(foundOrder.isPresent()) {
+            Order thisOrder = foundOrder.get();
+            if(thisOrder.getAccountId()!= null){
+                thisOrder.setAccount(accountProxy.getAccount(thisOrder.getAccountId()));
+            }
             return foundOrder.get();
         }
         else return null;
     }
 
     public Order createOrder(Order orderIn) {
-        String checkedAccount = accountProxy.checkAccountExists(orderIn.getAccountId());
+        String checkedAccount = accountProxy.getAccount(orderIn.getAccountId());
         if(checkedAccount != null){
             return orderRepository.save(orderIn);
         }
@@ -52,7 +56,7 @@ public class OrderManagementService {
             Order savedOrder = getOneOrder(orderNumber);
 
             if(orderUpdateInfo.getAccountId() != null
-                    & accountProxy.checkAccountExists(orderUpdateInfo.getAccountId()) != null){
+                    & accountProxy.getAccount(orderUpdateInfo.getAccountId()) != null){
                 savedOrder.setAccountId(orderUpdateInfo.getAccountId());
             }else throw new EntityNotFoundException();
 

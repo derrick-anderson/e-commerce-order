@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface AccountFeignProxy {
 
     @GetMapping("/accounts/{accountId}")
-    String checkAccountExists(@PathVariable(name = "accountId") Long accountId);
+    String getAccount(@PathVariable(name = "accountId") Long accountId);
 
 }

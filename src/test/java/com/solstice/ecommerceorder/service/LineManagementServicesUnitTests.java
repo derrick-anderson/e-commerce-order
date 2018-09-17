@@ -104,25 +104,25 @@ public class LineManagementServicesUnitTests {
     }
 
     //Convenience Methods
-    private Line getMockLine(Long lineId){
+    private static Line getMockLine(Long lineId){
         Line mockLine = new Line(20, new BigDecimal("150.00"), 5L ,12345L );
         mockLine.setLineItemId(lineId);
         mockLine.setShipmentId(67890L);
         return mockLine;
     }
 
-    private Line getMockSavedLine(){
+    private static Line getMockSavedLine(){
         Line mockLine = new Line(10, new BigDecimal("80.00"), 5L ,12345L );
         mockLine.setLineItemId(15L);
         return mockLine;
     }
 
-    private Line getMockLineToSave(){
+    private static Line getMockLineToSave(){
         return new Line(10, new BigDecimal("80.00"), 5L, 12345L);
 
     }
 
-    private List<Line> getMockLineList(){
+    private static List<Line> getMockLineList(){
         return new ArrayList<Line>(){{
             add(getMockLine(15L));
             add(getMockLine(16L));

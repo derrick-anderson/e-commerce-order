@@ -22,6 +22,12 @@ public class Order {
     private BigDecimal totalPrice;
 
     @Transient
+    private String account;
+
+    @Transient
+    private String shippingAddress;
+
+    @Transient
     private List<Line> lineItems = new ArrayList<>();
 
     public Order() {
@@ -80,5 +86,21 @@ public class Order {
 
     public void setLineItems(List<Line> lineItems) {
         this.lineItems = lineItems;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
     }
 }

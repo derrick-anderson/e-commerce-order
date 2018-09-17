@@ -42,9 +42,11 @@ public class OrderManagementServiceUnitTests {
     @Test
     public void getOneOrder_HappyPath(){
         when(orderRepository.findById(anyLong())).thenReturn(Optional.ofNullable(getMockOrder()));
+        when(accountFeignProxy.getAccount(anyLong())).thenReturn("{TestAccountData}");
 
         Order foundOrder = orderManagementService.getOneOrder(12345L);
         assertThat(foundOrder.getAccountId(), is(1L));
+        assertThat(foundOrder.getAccount(), is("{TestAccountData}"));
         assertThat(foundOrder.getShippingAddressId(), is(1L));
         assertThat(foundOrder.getOrderDate().toString(), is("2018-08-15"));
 
@@ -63,7 +65,7 @@ public class OrderManagementServiceUnitTests {
     @Test
     public void createOrder_HappyPath(){
         when(orderRepository.save(any(Order.class))).thenReturn(getMockOrder());
-        when(accountFeignProxy.checkAccountExists(1L)).thenReturn("ACCOUNT FOUND");
+        when(accountFeignProxy.getAccount(1L)).thenReturn("ACCOUNT FOUND");
 
         Order savedOrder = orderManagementService.createOrder(getOrderToSave());
 
@@ -87,7 +89,7 @@ public class OrderManagementServiceUnitTests {
     public void updateOrder_HappyPath(){
         Order updateOrder = new Order(5L, 15L);
         when(orderRepository.findById(12345L)).thenReturn(Optional.ofNullable(getMockOrder()));
-        when(accountFeignProxy.checkAccountExists(5L)).thenReturn("ACCOUNT EXISTS");
+        when(accountFeignProxy.getAccount(5L)).thenReturn("ACCOUNT EXISTS");
 
         Order updatedOrder = orderManagementService.updateOrder(12345L, updateOrder);
         assertThat(updatedOrder.getOrderNumber(), is(12345L));
@@ -98,7 +100,7 @@ public class OrderManagementServiceUnitTests {
     }
 
     //Convenience Methods
-    public Order getMockOrder(){
+    public static Order getMockOrder(){
         Order mockOrder = new Order();
         mockOrder.setOrderDate( LocalDate.of(2018,8,15));
         mockOrder.setOrderNumber(12345L);
@@ -109,11 +111,11 @@ public class OrderManagementServiceUnitTests {
         return mockOrder;
     }
 
-    public Order getOrderToSave(){
+    public static Order getOrderToSave(){
         return new Order( 1L, 1L);
     }
 
-    public List<Order> getMockOrderList(){
+    public static List<Order> getMockOrderList(){
         return new ArrayList<Order>(){{
             add(getMockOrder());
             add(getMockOrder());
