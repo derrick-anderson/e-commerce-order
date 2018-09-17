@@ -23,7 +23,10 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -85,10 +88,13 @@ public class OrderControllerUnitTests {
             .andDo(MockMvcResultHandlers.print());
     }
 
-//    @Test
-//    public void deleteOrder_HappyPath() throws Exception{
-//
-//    }
+    @Test
+    public void deleteOrder_HappyPath() throws Exception{
+        mockMvc.perform(delete("/orders/12345"))
+                .andExpect(status().isNoContent());
+
+        verify(orderManagementService, times(1)).deleteOrder(12345L);
+    }
     //Helper Method that provides mock objects for class
     public Order getMockOrder(){
         Order mockOrder = new Order(1L, 1L);
