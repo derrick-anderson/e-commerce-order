@@ -18,7 +18,7 @@ public class LineManagementServices {
     }
 
     public List<Line> getAllLinesForOrder(Long orderNumber) {
-        return lineRepository.findAllByOrderId(orderNumber);
+        return lineRepository.findAllByOrderNumber(orderNumber);
     }
 
     public Line getOneLineById(Long lineId) {
@@ -40,7 +40,7 @@ public class LineManagementServices {
         Line updatedLine = getOneLineById(lineId);
 
         if (updatedLine != null) {
-            if (lineToUpdate.getUnitPrice() != BigDecimal.ZERO) {
+            if (! lineToUpdate.getUnitPrice().equals(BigDecimal.ZERO)) {
                 updatedLine.setUnitPrice(lineToUpdate.getUnitPrice());
             }
             if (lineToUpdate.getQuantity() != 0) {
