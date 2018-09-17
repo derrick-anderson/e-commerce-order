@@ -1,7 +1,7 @@
-package com.sostice.ecommerceorder.service;
+package com.solstice.ecommerceorder.service;
 
-import com.sostice.ecommerceorder.data.LineRepository;
-import com.sostice.ecommerceorder.domain.Line;
+import com.solstice.ecommerceorder.data.LineRepository;
+import com.solstice.ecommerceorder.domain.Line;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +33,7 @@ public class LineManagementServicesUnitTests {
 
     @Test
     public void getAllLinesForOrder_HappyPath(){
-
-        when(lineRepository.findAllByOrderId(anyLong())).thenReturn(getMockLineList());
+        when(lineRepository.findAllByOrderNumber(anyLong())).thenReturn(getMockLineList());
 
         List<Line> allLines = lineManagementServices.getAllLinesForOrder(12345L);
 

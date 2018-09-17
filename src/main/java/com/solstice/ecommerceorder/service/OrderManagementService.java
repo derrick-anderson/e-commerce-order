@@ -1,7 +1,7 @@
-package com.sostice.ecommerceorder.service;
+package com.solstice.ecommerceorder.service;
 
-import com.sostice.ecommerceorder.data.OrderRepository;
-import com.sostice.ecommerceorder.domain.Order;
+import com.solstice.ecommerceorder.data.OrderRepository;
+import com.solstice.ecommerceorder.domain.Order;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;

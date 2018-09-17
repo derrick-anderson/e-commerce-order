@@ -1,7 +1,7 @@
-package com.sostice.ecommerceorder.controllers;
+package com.solstice.ecommerceorder.controllers;
 
-import com.sostice.ecommerceorder.domain.Line;
-import com.sostice.ecommerceorder.service.LineManagementServices;
+import com.solstice.ecommerceorder.domain.Line;
+import com.solstice.ecommerceorder.service.LineManagementServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

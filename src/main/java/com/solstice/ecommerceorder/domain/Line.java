@@ -1,4 +1,4 @@
-package com.sostice.ecommerceorder.domain;
+package com.solstice.ecommerceorder.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

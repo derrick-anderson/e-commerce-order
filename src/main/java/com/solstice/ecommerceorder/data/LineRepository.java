@@ -1,6 +1,6 @@
-package com.sostice.ecommerceorder.data;
+package com.solstice.ecommerceorder.data;
 
-import com.sostice.ecommerceorder.domain.Line;
+import com.solstice.ecommerceorder.domain.Line;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

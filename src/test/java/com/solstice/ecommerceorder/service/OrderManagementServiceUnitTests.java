@@ -1,7 +1,7 @@
-package com.sostice.ecommerceorder.service;
+package com.solstice.ecommerceorder.service;
 
-import com.sostice.ecommerceorder.data.OrderRepository;
-import com.sostice.ecommerceorder.domain.Order;
+import com.solstice.ecommerceorder.data.OrderRepository;
+import com.solstice.ecommerceorder.domain.Order;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

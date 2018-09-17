@@ -1,7 +1,7 @@
-package com.sostice.ecommerceorder.controllers;
+package com.solstice.ecommerceorder.controllers;
 
-import com.sostice.ecommerceorder.domain.Order;
-import com.sostice.ecommerceorder.service.OrderManagementService;
+import com.solstice.ecommerceorder.domain.Order;
+import com.solstice.ecommerceorder.service.OrderManagementService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
