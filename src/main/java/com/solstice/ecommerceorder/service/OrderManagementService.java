@@ -1,27 +1,40 @@
 package com.solstice.ecommerceorder.service;
 
+import com.solstice.ecommerceorder.data.AccountFeignProxy;
 import com.solstice.ecommerceorder.data.OrderRepository;
 import com.solstice.ecommerceorder.domain.Order;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderManagementService {
 
     private OrderRepository orderRepository;
 
-    public OrderManagementService(OrderRepository orderRepository){
+    private AccountFeignProxy accountProxy;
+
+    public OrderManagementService(OrderRepository orderRepository, AccountFeignProxy accountProxy){
         this.orderRepository = orderRepository;
+        this.accountProxy = accountProxy;
     }
 
     public Order getOneOrder(long orderNumber) {
-        return orderRepository.getOne(orderNumber);
+        Optional<Order> foundOrder = orderRepository.findById(orderNumber);
+        if(foundOrder.isPresent()) {
+            return foundOrder.get();
+        }
+        else return null;
     }
 
     public Order createOrder(Order orderIn) {
-        return orderRepository.save(orderIn);
+        String checkedAccount = accountProxy.checkAccountExists(orderIn.getAccountId());
+        if(checkedAccount != null){
+            return orderRepository.save(orderIn);
+        }
+        else throw new EntityNotFoundException();
     }
 
     public List<Order> getAllOrders() {
@@ -29,7 +42,7 @@ public class OrderManagementService {
     }
 
     public void deleteOrder(Long orderNumber) {
-        if(orderRepository.getOne(orderNumber) != null){
+        if(getOneOrder(orderNumber) != null){
             orderRepository.deleteById(orderNumber);
         }else throw new EntityNotFoundException();
     }
@@ -38,9 +51,11 @@ public class OrderManagementService {
         if(getOneOrder(orderNumber) != null){
             Order savedOrder = getOneOrder(orderNumber);
 
-            if(orderUpdateInfo.getAccountId() != null){
+            if(orderUpdateInfo.getAccountId() != null
+                    & accountProxy.checkAccountExists(orderUpdateInfo.getAccountId()) != null){
                 savedOrder.setAccountId(orderUpdateInfo.getAccountId());
-            }
+            }else throw new EntityNotFoundException();
+
             if(orderUpdateInfo.getShippingAddressId() != null){
                 savedOrder.setShippingAddressId(orderUpdateInfo.getShippingAddressId());
             }

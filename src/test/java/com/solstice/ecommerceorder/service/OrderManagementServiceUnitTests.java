@@ -1,5 +1,6 @@
 package com.solstice.ecommerceorder.service;
 
+import com.solstice.ecommerceorder.data.AccountFeignProxy;
 import com.solstice.ecommerceorder.data.OrderRepository;
 import com.solstice.ecommerceorder.domain.Order;
 import org.junit.Before;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -27,16 +29,19 @@ public class OrderManagementServiceUnitTests {
     @MockBean
     private OrderRepository orderRepository;
 
+    @MockBean
+    private AccountFeignProxy accountFeignProxy;
+
     private OrderManagementService orderManagementService;
 
     @Before
     public void setup(){
-        orderManagementService = new OrderManagementService(orderRepository);
+        orderManagementService = new OrderManagementService(orderRepository, accountFeignProxy);
     }
 
     @Test
     public void getOneOrder_HappyPath(){
-        when(orderRepository.getOne(anyLong())).thenReturn(getMockOrder());
+        when(orderRepository.findById(anyLong())).thenReturn(Optional.ofNullable(getMockOrder()));
 
         Order foundOrder = orderManagementService.getOneOrder(12345L);
         assertThat(foundOrder.getAccountId(), is(1L));
@@ -58,6 +63,7 @@ public class OrderManagementServiceUnitTests {
     @Test
     public void createOrder_HappyPath(){
         when(orderRepository.save(any(Order.class))).thenReturn(getMockOrder());
+        when(accountFeignProxy.checkAccountExists(1L)).thenReturn("ACCOUNT FOUND");
 
         Order savedOrder = orderManagementService.createOrder(getOrderToSave());
 
@@ -70,23 +76,24 @@ public class OrderManagementServiceUnitTests {
     @Test
     public void deleteOrder_HappyPath(){
 
-        when(orderRepository.getOne(12345L)).thenReturn(new Order());
+        when(orderRepository.findById(12345L)).thenReturn(Optional.ofNullable(new Order()));
         orderManagementService.deleteOrder(12345L);
 
-        verify(orderRepository, times(1)).getOne(12345L);
+        verify(orderRepository, times(1)).findById(12345L);
         verify(orderRepository, times(1)).deleteById(12345L);
     }
 
     @Test
     public void updateOrder_HappyPath(){
-        Order updateOrder = new Order(null, 15L);
-        when(orderRepository.getOne(12345L)).thenReturn(getMockOrder());
+        Order updateOrder = new Order(5L, 15L);
+        when(orderRepository.findById(12345L)).thenReturn(Optional.ofNullable(getMockOrder()));
+        when(accountFeignProxy.checkAccountExists(5L)).thenReturn("ACCOUNT EXISTS");
 
         Order updatedOrder = orderManagementService.updateOrder(12345L, updateOrder);
         assertThat(updatedOrder.getOrderNumber(), is(12345L));
         assertThat(updatedOrder.getOrderDate().toString(), is("2018-08-15"));
         assertThat(updatedOrder.getTotalPrice(), is(BigDecimal.ZERO));
-        assertThat(updatedOrder.getAccountId(), is(1L));
+        assertThat(updatedOrder.getAccountId(), is(5L));
         assertThat(updatedOrder.getShippingAddressId(), is(15L));
     }
 

@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(OrderController.class)
+@WebMvcTest(secure = false, controllers = OrderController.class)
 public class OrderControllerUnitTests {
 
     @Autowired
