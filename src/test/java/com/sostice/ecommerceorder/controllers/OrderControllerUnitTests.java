@@ -23,12 +23,11 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -95,6 +94,25 @@ public class OrderControllerUnitTests {
 
         verify(orderManagementService, times(1)).deleteOrder(12345L);
     }
+
+    @Test
+    public void updateOrder_HappyPath() throws Exception{
+        when(orderManagementService.updateOrder(eq(12345L), any(Order.class))).thenReturn(getMockOrder());
+
+        mockMvc.perform(put("/orders/12345")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content("{\"accountId\":2,\"shippingAddressId\":15}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.orderNumber", is(12345)))
+                .andExpect(jsonPath("$.accountId", is(1)))
+                .andExpect(jsonPath("$.shippingAddressId", is(1)))
+                .andExpect(jsonPath("$.orderDate", is("2018-08-15")));
+
+        verify(orderManagementService, times(1)).updateOrder(eq(12345L), any(Order.class));
+
+    }
+
     //Helper Method that provides mock objects for class
     public Order getMockOrder(){
         Order mockOrder = new Order(1L, 1L);

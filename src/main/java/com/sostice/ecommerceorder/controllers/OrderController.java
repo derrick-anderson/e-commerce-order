@@ -34,7 +34,12 @@ public class OrderController {
 
     @DeleteMapping("/orders/{orderNumber}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteorder(@PathVariable("orderNumber") Long orderNumber){
+    public void deleteOrder(@PathVariable("orderNumber") Long orderNumber){
         orderManagementService.deleteOrder(orderNumber);
+    }
+
+    @PutMapping("/orders/{orderNumber}")
+    public Order updateOrder(@PathVariable("orderNumber") Long orderNumber, Order orderUpdateInfo){
+        return orderManagementService.updateOrder(orderNumber, orderUpdateInfo);
     }
 }
