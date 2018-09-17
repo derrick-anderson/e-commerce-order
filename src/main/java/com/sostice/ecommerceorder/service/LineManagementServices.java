@@ -4,6 +4,7 @@ import com.sostice.ecommerceorder.data.LineRepository;
 import com.sostice.ecommerceorder.domain.Line;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -25,5 +26,12 @@ public class LineManagementServices {
 
     public Line saveLine(Line lineToSave) {
         return lineRepository.save(lineToSave);
+    }
+
+    public void deleteLine(Long lineId) {
+
+        if(lineRepository.getOne(lineId) != null){
+            lineRepository.deleteById(lineId);
+        }else throw new EntityNotFoundException();
     }
 }

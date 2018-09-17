@@ -17,6 +17,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -78,7 +80,15 @@ public class LineManagementServicesUnitTests {
 
     }
 
+    @Test
+    public void deleteLineItem_HappyPath(){
+        when(lineRepository.getOne(15L)).thenReturn(getMockLine(15L));
 
+        lineManagementServices.deleteLine(15L);
+
+        verify(lineRepository, times(1)).getOne(15L);
+        verify(lineRepository, times(1)).deleteById(15L);
+    }
     //Convenience Methods
     private Line getMockLine(Long lineId){
         Line mockLine = new Line(20, new BigDecimal("150.00"), 5L ,12345L );
