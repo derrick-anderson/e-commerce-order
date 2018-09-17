@@ -20,12 +20,11 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -101,6 +100,25 @@ public class LineControllerUnitTests {
 
         verify(lineManagementServices, times(1)).deleteLine(15L);
 
+    }
+
+    @Test
+    public void updateLineItem_HappyPath() throws Exception{
+        when(lineManagementServices.updateLine(eq(15L), any(Line.class))).thenReturn(getSavedMockLine(15L));
+
+        mockMvc.perform(put("/orders/12345/lines/15")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content("{\"quantity\":10}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.lineItemId", is(15)))
+                .andExpect(jsonPath("$.quantity", is(20)))
+                .andExpect(jsonPath("$.unitPrice", is(150.00)))
+                .andExpect(jsonPath("$.totalPrice", is(3000.00)))
+                .andExpect(jsonPath("$.shipmentId", is(nullValue())))
+                .andExpect(jsonPath("$.productId", is(nullValue())))
+                .andExpect(jsonPath("$.shipmentId", is(nullValue())))
+                .andExpect(jsonPath("$.orderNumber", is(12345)));
     }
 
     private List<Line> getMockLineList() {

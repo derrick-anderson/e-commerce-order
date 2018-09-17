@@ -89,6 +89,21 @@ public class LineManagementServicesUnitTests {
         verify(lineRepository, times(1)).getOne(15L);
         verify(lineRepository, times(1)).deleteById(15L);
     }
+
+    @Test
+    public void updateLineItem_HappyPath(){
+        when(lineRepository.getOne(15L)).thenReturn(getMockLine(15L));
+
+        Line lineToUpdate = new Line();
+        lineToUpdate.setQuantity(10);
+
+        Line updatedLine = lineManagementServices.updateLine(15L, lineToUpdate);
+        assertThat(updatedLine.getQuantity(), is(10));
+        assertThat(updatedLine.getTotalPrice(), is(new BigDecimal("1500.00")));
+
+        verify(lineRepository, times(1)).save(any(Line.class));
+    }
+
     //Convenience Methods
     private Line getMockLine(Long lineId){
         Line mockLine = new Line(20, new BigDecimal("150.00"), 5L ,12345L );

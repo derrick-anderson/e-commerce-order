@@ -5,6 +5,7 @@ import com.sostice.ecommerceorder.domain.Line;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -33,5 +34,26 @@ public class LineManagementServices {
         if(lineRepository.getOne(lineId) != null){
             lineRepository.deleteById(lineId);
         }else throw new EntityNotFoundException();
+    }
+
+    public Line updateLine(Long lineId, Line lineToUpdate) {
+        Line updatedLine = getOneLineById(lineId);
+
+        if (updatedLine != null) {
+            if (lineToUpdate.getUnitPrice() != BigDecimal.ZERO) {
+                updatedLine.setUnitPrice(lineToUpdate.getUnitPrice());
+            }
+            if (lineToUpdate.getQuantity() != 0) {
+                updatedLine.setQuantity(lineToUpdate.getQuantity());
+            }
+            if (lineToUpdate.getProductId() != null) {
+                updatedLine.setProductId(lineToUpdate.getProductId());
+            }
+            if (lineToUpdate.getShipmentId() != null) {
+                updatedLine.setShipmentId(lineToUpdate.getShipmentId());
+            }
+            lineRepository.save(updatedLine);
+            return updatedLine;
+        } else throw new EntityNotFoundException();
     }
 }

@@ -43,4 +43,9 @@ public class LineController {
         lineManagementServices.deleteLine(lineId);
     }
 
+    @PutMapping("/orders/{orderNumber}/lines/{lineId}")
+    public Line updateLine(@PathVariable("orderNumber") Long orderNumber, @PathVariable("lineId") Long lineId, Line lineUpdateData){
+        return lineManagementServices.updateLine(lineId,lineUpdateData);
+    }
+
 }
