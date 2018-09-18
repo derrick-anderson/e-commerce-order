@@ -28,7 +28,7 @@ public class LineManagementServices {
     }
 
     public Line getOneLineById(Long lineId) {
-        return lineRepository.getOne(lineId);
+        return lineRepository.findById(lineId).get();
     }
 
     public Line saveLine(Line lineToSave) {
@@ -47,7 +47,7 @@ public class LineManagementServices {
     }
 
     public Line updateLine(Long lineId, Line lineToUpdate) {
-        Line updatedLine = getOneLineById(lineId);
+        Line updatedLine = lineRepository.findById(lineId).get();
 
         if (updatedLine != null) {
             if (! lineToUpdate.getUnitPrice().equals(BigDecimal.ZERO)) {
