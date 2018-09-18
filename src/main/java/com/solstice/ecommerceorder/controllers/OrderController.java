@@ -18,7 +18,7 @@ public class OrderController {
 
     @PostMapping("/orders")
     @ResponseStatus(HttpStatus.CREATED)
-    public Order createOrder(Order orderIn){
+    public Order createOrder(@RequestBody Order orderIn){
         return orderManagementService.createOrder(orderIn);
     }
 
@@ -39,7 +39,7 @@ public class OrderController {
     }
 
     @PutMapping("/orders/{orderNumber}")
-    public Order updateOrder(@PathVariable("orderNumber") Long orderNumber, Order orderUpdateInfo){
+    public Order updateOrder(@PathVariable("orderNumber") Long orderNumber, @RequestBody Order orderUpdateInfo){
         return orderManagementService.updateOrder(orderNumber, orderUpdateInfo);
     }
 }

@@ -31,7 +31,7 @@ public class Order {
     @JsonRawValue
     private String shippingAddress;
 
-    @Transient
+    @OneToMany
     private List<Line> lineItems = new ArrayList<>();
 
     public Order() {

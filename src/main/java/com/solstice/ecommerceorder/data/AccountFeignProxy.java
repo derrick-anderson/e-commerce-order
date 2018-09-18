@@ -4,14 +4,16 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(name = "e-commerce-account")
+@FeignClient("e-commerce-account-service")
 @Component
 public interface AccountFeignProxy {
 
-    @GetMapping("/accounts/{accountId}")
-    String getAccount(@PathVariable(name = "accountId") Long accountId);
+    @RequestMapping(method = RequestMethod.GET, value = "/accounts/{accountId}")
+    String getAccount(@PathVariable(value = "accountId") Long accountId);
 
     @GetMapping("/accounts/{accountId}/addresses/{addressId}")
-    String getAddress(@PathVariable(name = "accountId") Long accountId, @PathVariable(name = "addressId") Long addressId);
+    String getAddress(@PathVariable("accountId") Long accountId, @PathVariable(name = "addressId") Long addressId);
 }

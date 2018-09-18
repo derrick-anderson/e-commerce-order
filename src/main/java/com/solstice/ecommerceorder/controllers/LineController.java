@@ -18,7 +18,7 @@ public class LineController {
 
     @PostMapping("/orders/{orderNumber}/lines")
     @ResponseStatus(HttpStatus.CREATED)
-    public Line createLineForOrder(@PathVariable("orderNumber") Long orderNumber, Line orderLine){
+    public Line createLineForOrder(@PathVariable("orderNumber") Long orderNumber, @RequestBody Line orderLine){
 
         orderLine.setOrderNumber(orderNumber);
         return lineManagementServices.saveLine(orderLine);
@@ -44,7 +44,7 @@ public class LineController {
     }
 
     @PutMapping("/orders/{orderNumber}/lines/{lineId}")
-    public Line updateLine(@PathVariable("orderNumber") Long orderNumber, @PathVariable("lineId") Long lineId, Line lineUpdateData){
+    public Line updateLine(@PathVariable("orderNumber") Long orderNumber, @PathVariable("lineId") Long lineId, @RequestBody Line lineUpdateData){
         return lineManagementServices.updateLine(lineId,lineUpdateData);
     }
 

@@ -29,6 +29,10 @@ public class LineManagementServices {
         return lineRepository.save(lineToSave);
     }
 
+    public Line addLineToOrder(Long orderNumber, Line lineToSave){
+        return null;
+    }
+
     public void deleteLine(Long lineId) {
 
         if(lineRepository.getOne(lineId) != null){

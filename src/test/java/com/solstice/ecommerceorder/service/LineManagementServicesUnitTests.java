@@ -80,6 +80,13 @@ public class LineManagementServicesUnitTests {
     }
 
     @Test
+    public void addLineItemToOrder_HappyPath(){
+        when(lineRepository.findAllByOrderNumber(12345L)).thenReturn(getMockLineList());
+
+        Line savedLine = lineManagementServices.addLineToOrder(getMockLineToSave().getOrderNumber(), getMockLineToSave());
+    }
+
+    @Test
     public void deleteLineItem_HappyPath(){
         when(lineRepository.getOne(15L)).thenReturn(getMockLine(15L));
 
