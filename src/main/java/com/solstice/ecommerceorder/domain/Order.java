@@ -34,6 +34,9 @@ public class Order {
     @OneToMany
     private List<Line> lineItems = new ArrayList<>();
 
+    @Transient
+    private String shipments;
+
     public Order() {
     }
 
@@ -106,5 +109,13 @@ public class Order {
 
     public void setShippingAddress(String shippingAddress) {
         this.shippingAddress = shippingAddress;
+    }
+
+    public String getShipments() {
+        return shipments;
+    }
+
+    public void setShipments(String shipments) {
+        this.shipments = shipments;
     }
 }

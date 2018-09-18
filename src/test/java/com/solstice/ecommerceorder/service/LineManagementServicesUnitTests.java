@@ -1,6 +1,7 @@
 package com.solstice.ecommerceorder.service;
 
 import com.solstice.ecommerceorder.data.LineRepository;
+import com.solstice.ecommerceorder.data.ShipmentFeignProxy;
 import com.solstice.ecommerceorder.domain.Line;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +28,9 @@ public class LineManagementServicesUnitTests {
 
     @MockBean
     private LineRepository lineRepository;
+
+    @MockBean
+    private ShipmentFeignProxy shipmentFeignProxy;
 
     @Autowired
     private LineManagementServices lineManagementServices;
@@ -79,11 +83,20 @@ public class LineManagementServicesUnitTests {
 
     }
 
-    @Test
-    public void addLineItemToOrder_HappyPath(){
-        when(lineRepository.findAllByOrderNumber(12345L)).thenReturn(getMockLineList());
+//    @Test
+//    public void addLineItemToOrder_HappyPath(){
+//        when(lineRepository.findAllByOrderNumber(12345L)).thenReturn(getMockLineList());
+//
+//        Line savedLine = lineManagementServices.addLineToOrder(getMockLineToSave().getOrderNumber(), getMockLineToSave());
+//    }
 
-        Line savedLine = lineManagementServices.addLineToOrder(getMockLineToSave().getOrderNumber(), getMockLineToSave());
+    @Test
+    public void getAllShipmentsFromLines_HappyPath(){
+        when(shipmentFeignProxy.getShipment(anyLong())).thenReturn("{TestShipment}");
+
+        String shipments = lineManagementServices.getAllShipmentsForLines(getMockLineList());
+        verify(shipmentFeignProxy, times(6)).getShipment(anyLong());
+        System.out.println(shipments);
     }
 
     @Test

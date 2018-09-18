@@ -1,20 +1,26 @@
 package com.solstice.ecommerceorder.service;
 
 import com.solstice.ecommerceorder.data.LineRepository;
+import com.solstice.ecommerceorder.data.ShipmentFeignProxy;
 import com.solstice.ecommerceorder.domain.Line;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class LineManagementServices {
 
     private LineRepository lineRepository;
 
-    private LineManagementServices(LineRepository lineRepository){
+    private ShipmentFeignProxy shipmentFeignProxy;
+
+    private LineManagementServices(LineRepository lineRepository, ShipmentFeignProxy shipmentFeignProxy){
         this.lineRepository = lineRepository;
+        this.shipmentFeignProxy = shipmentFeignProxy;
     }
 
     public List<Line> getAllLinesForOrder(Long orderNumber) {
@@ -59,5 +65,13 @@ public class LineManagementServices {
             lineRepository.save(updatedLine);
             return updatedLine;
         } else throw new EntityNotFoundException();
+    }
+
+    public String getAllShipmentsForLines(List<Line> linesIn) {
+        return "[" + linesIn.stream()
+                .map(Line::getShipmentId)
+                .filter(Objects::nonNull)
+                .map(a -> shipmentFeignProxy.getShipment(a))
+                .collect(Collectors.joining(", ")) + "]";
     }
 }

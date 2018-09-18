@@ -16,13 +16,15 @@ public class OrderManagementService {
 
     private OrderRepository orderRepository;
 
+    private LineManagementServices lineManagementServices;
+
     private LineRepository lineRepository;
 
     private AccountFeignProxy accountProxy;
 
-    public OrderManagementService(OrderRepository orderRepository, LineRepository lineRepository, AccountFeignProxy accountProxy){
+    public OrderManagementService(OrderRepository orderRepository, LineManagementServices lineManagementServices, AccountFeignProxy accountProxy){
         this.orderRepository = orderRepository;
-        this.lineRepository = lineRepository;
+        this.lineManagementServices = lineManagementServices;
         this.accountProxy = accountProxy;
     }
 
@@ -41,8 +43,10 @@ public class OrderManagementService {
         if(orderIn.getShippingAddressId() != null){
             orderIn.setShippingAddress(accountProxy.getAddress(orderIn.getAccountId(), orderIn.getShippingAddressId()));
         }
-        if(lineRepository.findAllByOrderNumber(orderIn.getOrderNumber()) != null){
-            orderIn.setLineItems(lineRepository.findAllByOrderNumber(orderIn.getOrderNumber()));
+        if(lineManagementServices.getAllLinesForOrder(orderIn.getOrderNumber()) != null){
+            orderIn.setLineItems(lineManagementServices.getAllLinesForOrder(orderIn.getOrderNumber()));
+        }if(orderIn.getLineItems() != null){
+            orderIn.setShipments(lineManagementServices.getAllShipmentsForLines(orderIn.getLineItems()));
         }
         return orderIn;
     }
