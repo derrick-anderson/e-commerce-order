@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderManagementService {
@@ -24,13 +25,19 @@ public class OrderManagementService {
     public Order getOneOrder(long orderNumber) {
         Optional<Order> foundOrder = orderRepository.findById(orderNumber);
         if(foundOrder.isPresent()) {
-            Order thisOrder = foundOrder.get();
-            if(thisOrder.getAccountId()!= null){
-                thisOrder.setAccount(accountProxy.getAccount(thisOrder.getAccountId()));
-            }
-            return foundOrder.get();
+            return addDetails(foundOrder.get());
         }
         else return null;
+    }
+
+    public Order addDetails(Order orderIn){
+        if(orderIn.getAccountId()!= null){
+            orderIn.setAccount(accountProxy.getAccount(orderIn.getAccountId()));
+        }
+        if(orderIn.getShippingAddressId() != null){
+            orderIn.setShippingAddress(accountProxy.getAddress(orderIn.getAccountId(), orderIn.getShippingAddressId()));
+        }
+        return orderIn;
     }
 
     public Order createOrder(Order orderIn) {
@@ -42,7 +49,8 @@ public class OrderManagementService {
     }
 
     public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+        return orderRepository.findAll().stream()
+                .map(order -> addDetails(order)).collect(Collectors.toList());
     }
 
     public void deleteOrder(Long orderNumber) {

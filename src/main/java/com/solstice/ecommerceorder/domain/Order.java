@@ -1,5 +1,7 @@
 package com.solstice.ecommerceorder.domain;
 
+import com.fasterxml.jackson.annotation.JsonRawValue;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -22,9 +24,11 @@ public class Order {
     private BigDecimal totalPrice;
 
     @Transient
+    @JsonRawValue
     private String account;
 
     @Transient
+    @JsonRawValue
     private String shippingAddress;
 
     @Transient

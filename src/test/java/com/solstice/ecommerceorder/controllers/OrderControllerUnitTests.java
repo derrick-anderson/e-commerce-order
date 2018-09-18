@@ -72,6 +72,7 @@ public class OrderControllerUnitTests {
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$", hasSize(4)))
                 .andExpect(jsonPath("$[3].orderNumber", is(12345)))
+                .andExpect(jsonPath("$[3].shippingAddress").exists())
                 .andDo(MockMvcResultHandlers.print());
     }
 
@@ -84,6 +85,9 @@ public class OrderControllerUnitTests {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$").exists())
             .andExpect(jsonPath("$.orderNumber", is(12345)))
+            .andExpect(jsonPath("$.shippingAddress.street", is("123 Freedom Street")))
+            .andExpect(jsonPath("$.account.firstName", is("Derrick")))
+//            .andExpect(jsonPath("$.shippingAddress", is("{\"street\" : \"123 Freedom Street\"}")))
             .andDo(MockMvcResultHandlers.print());
     }
 
@@ -117,6 +121,8 @@ public class OrderControllerUnitTests {
     public Order getMockOrder(){
         Order mockOrder = new Order(1L, 1L);
         mockOrder.setOrderDate( LocalDate.of(2018,8,15));
+        mockOrder.setShippingAddress("{\"street\" : \"123 Freedom Street\"}");
+        mockOrder.setAccount("{\"firstName\" : \"Derrick\",\"lastName\" : \"Anderson\",\"emailAddress\" : \"deanederson@solstice.com\"}");
         mockOrder.setOrderNumber(12345L);
         mockOrder.setTotalPrice(new BigDecimal("0.00"));
 

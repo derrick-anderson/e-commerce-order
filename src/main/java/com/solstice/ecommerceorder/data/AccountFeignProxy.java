@@ -12,4 +12,6 @@ public interface AccountFeignProxy {
     @GetMapping("/accounts/{accountId}")
     String getAccount(@PathVariable(name = "accountId") Long accountId);
 
+    @GetMapping("/accounts/{accountId}/addresses/{addressId}")
+    String getAddress(@PathVariable(name = "accountId") Long accountId, @PathVariable(name = "addressId") Long addressId);
 }

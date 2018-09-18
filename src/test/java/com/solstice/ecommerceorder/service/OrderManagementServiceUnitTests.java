@@ -43,11 +43,13 @@ public class OrderManagementServiceUnitTests {
     public void getOneOrder_HappyPath(){
         when(orderRepository.findById(anyLong())).thenReturn(Optional.ofNullable(getMockOrder()));
         when(accountFeignProxy.getAccount(anyLong())).thenReturn("{TestAccountData}");
+        when(accountFeignProxy.getAddress(anyLong(), anyLong())).thenReturn("{TestShippingAddress}");
 
         Order foundOrder = orderManagementService.getOneOrder(12345L);
         assertThat(foundOrder.getAccountId(), is(1L));
         assertThat(foundOrder.getAccount(), is("{TestAccountData}"));
         assertThat(foundOrder.getShippingAddressId(), is(1L));
+        assertThat(foundOrder.getShippingAddress(), is("{TestShippingAddress}"));
         assertThat(foundOrder.getOrderDate().toString(), is("2018-08-15"));
 
     }
