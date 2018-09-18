@@ -35,6 +35,7 @@ public class Order {
     private List<Line> lineItems = new ArrayList<>();
 
     @Transient
+    @JsonRawValue
     private String shipments;
 
     public Order() {
