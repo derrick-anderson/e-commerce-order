@@ -1,7 +1,9 @@
 package com.solstice.ecommerceorder.service;
 
 import com.solstice.ecommerceorder.data.AccountFeignProxy;
+import com.solstice.ecommerceorder.data.LineRepository;
 import com.solstice.ecommerceorder.data.OrderRepository;
+import com.solstice.ecommerceorder.domain.Line;
 import com.solstice.ecommerceorder.domain.Order;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +21,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -30,18 +33,22 @@ public class OrderManagementServiceUnitTests {
     private OrderRepository orderRepository;
 
     @MockBean
+    private LineRepository lineRepository;
+
+    @MockBean
     private AccountFeignProxy accountFeignProxy;
 
     private OrderManagementService orderManagementService;
 
     @Before
     public void setup(){
-        orderManagementService = new OrderManagementService(orderRepository, accountFeignProxy);
+        orderManagementService = new OrderManagementService(orderRepository, lineRepository, accountFeignProxy);
     }
 
     @Test
     public void getOneOrder_HappyPath(){
         when(orderRepository.findById(anyLong())).thenReturn(Optional.ofNullable(getMockOrder()));
+        when(lineRepository.findAllByOrderNumber(12345L)).thenReturn(getMockLineList());
         when(accountFeignProxy.getAccount(anyLong())).thenReturn("{TestAccountData}");
         when(accountFeignProxy.getAddress(anyLong(), anyLong())).thenReturn("{TestShippingAddress}");
 
@@ -51,6 +58,7 @@ public class OrderManagementServiceUnitTests {
         assertThat(foundOrder.getShippingAddressId(), is(1L));
         assertThat(foundOrder.getShippingAddress(), is("{TestShippingAddress}"));
         assertThat(foundOrder.getOrderDate().toString(), is("2018-08-15"));
+        assertThat(foundOrder.getLineItems().size(), is(6));
 
     }
 
@@ -125,4 +133,24 @@ public class OrderManagementServiceUnitTests {
             add(getMockOrder());
         }};
     }
+
+    //Convenience Methods
+    private static Line getMockLine(Long lineId){
+        Line mockLine = new Line(20, new BigDecimal("150.00"), 5L ,12345L );
+        mockLine.setLineItemId(lineId);
+        mockLine.setShipmentId(67890L);
+        return mockLine;
+    }
+
+    private static List<Line> getMockLineList(){
+        return new ArrayList<Line>(){{
+            add(getMockLine(15L));
+            add(getMockLine(16L));
+            add(getMockLine(17L));
+            add(getMockLine(18L));
+            add(getMockLine(19L));
+            add(getMockLine(20L));
+        }};
+    }
+
 }

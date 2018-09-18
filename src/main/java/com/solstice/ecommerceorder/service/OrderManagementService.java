@@ -1,6 +1,7 @@
 package com.solstice.ecommerceorder.service;
 
 import com.solstice.ecommerceorder.data.AccountFeignProxy;
+import com.solstice.ecommerceorder.data.LineRepository;
 import com.solstice.ecommerceorder.data.OrderRepository;
 import com.solstice.ecommerceorder.domain.Order;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,13 @@ public class OrderManagementService {
 
     private OrderRepository orderRepository;
 
+    private LineRepository lineRepository;
+
     private AccountFeignProxy accountProxy;
 
-    public OrderManagementService(OrderRepository orderRepository, AccountFeignProxy accountProxy){
+    public OrderManagementService(OrderRepository orderRepository, LineRepository lineRepository, AccountFeignProxy accountProxy){
         this.orderRepository = orderRepository;
+        this.lineRepository = lineRepository;
         this.accountProxy = accountProxy;
     }
 
@@ -37,6 +41,9 @@ public class OrderManagementService {
         if(orderIn.getShippingAddressId() != null){
             orderIn.setShippingAddress(accountProxy.getAddress(orderIn.getAccountId(), orderIn.getShippingAddressId()));
         }
+        if(lineRepository.findAllByOrderNumber(orderIn.getOrderNumber()) != null){
+            orderIn.setLineItems(lineRepository.findAllByOrderNumber(orderIn.getOrderNumber()));
+        }
         return orderIn;
     }
 
@@ -54,7 +61,7 @@ public class OrderManagementService {
     }
 
     public void deleteOrder(Long orderNumber) {
-        if(getOneOrder(orderNumber) != null){
+        if(orderRepository.findById(orderNumber).isPresent()){
             orderRepository.deleteById(orderNumber);
         }else throw new EntityNotFoundException();
     }
