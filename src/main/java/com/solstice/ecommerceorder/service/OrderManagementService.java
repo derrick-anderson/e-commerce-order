@@ -30,7 +30,7 @@ public class OrderManagementService {
         else return null;
     }
 
-    public Order addDetails(Order orderIn){
+    private Order addDetails(Order orderIn){
         if(orderIn.getAccountId()!= null){
             orderIn.setAccount(accountProxy.getAccount(orderIn.getAccountId()));
         }
