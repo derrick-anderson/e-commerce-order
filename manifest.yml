@@ -6,10 +6,10 @@ applications:
    disk_quota: 512M
    memory: 512M
    routes:
-     - route: e-commerce-order-deanderson.cfapps.io
+      - route: e-commerce-order-deanderson.cfapps.io
    services:
-     - e-commerce-order-db
-     - e-commerce-service-registry
-     - e-commerce-hystrix-dashboard
+      - e-commerce-order-db
+      - e-commerce-service-registry
+      - e-commerce-hystrix-dashboard
    env:
       JAVA_OPTS: '-Xss256K  -Xmx256m -Dserver.tomcat.max-threads=3 -Dspring.datasource.hikari.maximum-pool-size=2'
