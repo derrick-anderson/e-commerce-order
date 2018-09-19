@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient("e-commerce-shipment-service")
 @Component
-public interface ShipmentFeignProxy {
+@FeignClient("e-commerce-product-service")
+public interface ProductFeignProxy {
 
-    @RequestMapping(method = RequestMethod.GET, value = "/shipments/{shipmentId}")
-    String getShipment(@PathVariable("shipmentId")Long shipmentId);
+    @RequestMapping(method = RequestMethod.GET, value = "/products/{id}")
+    String getProduct(@PathVariable("id") Long productId);
 }

@@ -1,6 +1,7 @@
 package com.solstice.ecommerceorder.service;
 
 import com.solstice.ecommerceorder.data.LineRepository;
+import com.solstice.ecommerceorder.data.ProductFeignProxy;
 import com.solstice.ecommerceorder.data.ShipmentFeignProxy;
 import com.solstice.ecommerceorder.domain.Line;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,12 @@ public class LineManagementServices {
 
     private ShipmentFeignProxy shipmentFeignProxy;
 
-    private LineManagementServices(LineRepository lineRepository, ShipmentFeignProxy shipmentFeignProxy){
+    private ProductFeignProxy productFeignProxy;
+
+    private LineManagementServices(LineRepository lineRepository, ShipmentFeignProxy shipmentFeignProxy, ProductFeignProxy productFeignProxy){
         this.lineRepository = lineRepository;
         this.shipmentFeignProxy = shipmentFeignProxy;
+        this.productFeignProxy = productFeignProxy;
     }
 
     public List<Line> getAllLinesForOrder(Long orderNumber) {
@@ -28,7 +32,8 @@ public class LineManagementServices {
     }
 
     public Line getOneLineById(Long lineId) {
-        return lineRepository.findById(lineId).get();
+
+        return addProduct(lineRepository.findById(lineId).get());
     }
 
     public Line saveLine(Line lineToSave) {
@@ -76,6 +81,21 @@ public class LineManagementServices {
     }
 
     public List<Line> getAllLinesForShipment(Long shipmentId){
-        return lineRepository.findAllByShipmentId(shipmentId);
+        return addProducts(lineRepository.findAllByShipmentId(shipmentId));
+    }
+
+    private Line addProduct(Line lineIn){
+        if(lineIn.getProductId() != null) {
+            lineIn.setProduct(productFeignProxy.getProduct(lineIn.getProductId()));
+        }
+        return lineIn;
+    }
+
+    private List<Line> addProducts(List<Line> linesIn){
+        linesIn.forEach(
+                a -> a.setProduct(productFeignProxy.getProduct(a.getProductId()))
+                );
+        return linesIn;
+
     }
 }

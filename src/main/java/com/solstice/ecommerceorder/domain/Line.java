@@ -1,5 +1,7 @@
 package com.solstice.ecommerceorder.domain;
 
+import com.fasterxml.jackson.annotation.JsonRawValue;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -11,12 +13,16 @@ public class Line {
     private Long lineItemId;
     private int quantity;
     private BigDecimal unitPrice = BigDecimal.ZERO;
-
-    @Transient
-    private BigDecimal totalPrice = BigDecimal.ZERO;
     private Long shipmentId;
     private Long productId;
     private Long orderNumber;
+
+    @Transient
+    @JsonRawValue
+    private String product;
+
+    @Transient
+    private BigDecimal totalPrice = BigDecimal.ZERO;
 
     public Line() {
     }
@@ -78,5 +84,13 @@ public class Line {
 
     public void setOrderNumber(Long orderNumber) {
         this.orderNumber = orderNumber;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
     }
 }
