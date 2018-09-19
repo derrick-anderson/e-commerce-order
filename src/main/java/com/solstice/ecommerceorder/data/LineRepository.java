@@ -8,5 +8,7 @@ import java.util.List;
 
 @Repository
 public interface LineRepository extends JpaRepository<Line, Long> {
-    List<Line> findAllByOrderNumber(long orderNumber);
+    List<Line> findAllByOrderNumber(Long orderNumber);
+
+    List<Line> findAllByShipmentId(Long shipmentId);
 }

@@ -48,4 +48,9 @@ public class LineController {
         return lineManagementServices.updateLine(lineId,lineUpdateData);
     }
 
+    @GetMapping("/lines")
+    public List<Line> getAllLinesForShipment(@RequestParam("shipmentId") Long shipmentId){
+        return lineManagementServices.getAllLinesForShipment(shipmentId);
+    }
+
 }

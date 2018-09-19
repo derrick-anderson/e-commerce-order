@@ -74,4 +74,8 @@ public class LineManagementServices {
                 .map(a -> shipmentFeignProxy.getShipment(a))
                 .collect(Collectors.joining(", ")) + "]";
     }
+
+    public List<Line> getAllLinesForShipment(Long shipmentId){
+        return lineRepository.findAllByShipmentId(shipmentId);
+    }
 }
