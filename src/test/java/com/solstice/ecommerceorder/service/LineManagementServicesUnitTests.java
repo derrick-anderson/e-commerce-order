@@ -1,6 +1,7 @@
 package com.solstice.ecommerceorder.service;
 
 import com.solstice.ecommerceorder.data.LineRepository;
+import com.solstice.ecommerceorder.data.ProductFeignProxy;
 import com.solstice.ecommerceorder.data.ShipmentFeignProxy;
 import com.solstice.ecommerceorder.domain.Line;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -31,6 +33,9 @@ public class LineManagementServicesUnitTests {
 
     @MockBean
     private ShipmentFeignProxy shipmentFeignProxy;
+
+    @MockBean
+    private ProductFeignProxy productFeignProxy;
 
     @Autowired
     private LineManagementServices lineManagementServices;
@@ -53,7 +58,7 @@ public class LineManagementServicesUnitTests {
     @Test
     public void getOneLineById_HappyPath(){
 
-        when(lineRepository.getOne(15L)).thenReturn(getMockLine(15L));
+        when(lineRepository.findById(15L)).thenReturn(Optional.of(getMockLine(15L)));
 
         Line foundLine = lineManagementServices.getOneLineById(15L);
 
@@ -111,7 +116,7 @@ public class LineManagementServicesUnitTests {
 
     @Test
     public void updateLineItem_HappyPath(){
-        when(lineRepository.getOne(15L)).thenReturn(getMockLine(15L));
+        when(lineRepository.findById(15L)).thenReturn(Optional.of(getMockLine(15L)));
 
         Line lineToUpdate = new Line();
         lineToUpdate.setQuantity(10);
